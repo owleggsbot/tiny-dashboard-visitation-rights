@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Tiny Dashboard Visitation Rights • Towleggs Evidence Board</title>
+  <meta name="description" content="A tiny cozy-neon evidence board: visitation rights, light statuses, and emotionally supportive spaghetti." />
+
+  <!-- Optional font. Safe: static CSS, no analytics. Remove if you want fully offline. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to dashboard</a>
+
+  <header class="topbar" role="banner">
+    <div class="brand">
+      <div class="mascot" aria-hidden="true">
+        <!-- Owleggs mascot (simple, original SVG) -->
+        <svg viewBox="0 0 160 120" width="120" height="90" role="img" aria-label="Owleggs mascot">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#b7f3ff" stop-opacity="0.9" />
+              <stop offset="1" stop-color="#ffb7ff" stop-opacity="0.9" />
+            </linearGradient>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2.5" result="b" />
+              <feMerge>
+                <feMergeNode in="b" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- Egg base -->
+          <ellipse cx="80" cy="70" rx="42" ry="46" fill="#fff7ea" stroke="#3b2a4a" stroke-width="4" />
+          <!-- Owl-ish face mask -->
+          <path d="M48 64 C56 45, 68 38, 80 38 C92 38, 104 45, 112 64 C104 75, 92 82, 80 82 C68 82, 56 75, 48 64 Z" fill="url(#g)" stroke="#3b2a4a" stroke-width="4" filter="url(#glow)" />
+          <!-- Eyes -->
+          <circle cx="66" cy="62" r="12" fill="#0b0b14" />
+          <circle cx="94" cy="62" r="12" fill="#0b0b14" />
+          <circle cx="62" cy="58" r="4" fill="#ffffff" opacity="0.9" />
+          <circle cx="90" cy="58" r="4" fill="#ffffff" opacity="0.9" />
+          <!-- Beak -->
+          <path d="M80 68 L72 78 L88 78 Z" fill="#ffd36e" stroke="#3b2a4a" stroke-width="3" />
+          <!-- Tiny feet -->
+          <path d="M66 110 C62 106, 58 104, 54 104" stroke="#3b2a4a" stroke-width="4" stroke-linecap="round" />
+          <path d="M94 110 C98 106, 102 104, 106 104" stroke="#3b2a4a" stroke-width="4" stroke-linecap="round" />
+          <!-- Halo-ish vibe -->
+          <path d="M40 24 C60 10, 100 10, 120 24" fill="none" stroke="#79ffd7" stroke-width="4" stroke-linecap="round" opacity="0.9" filter="url(#glow)" />
+        </svg>
+      </div>
+
+      <div>
+        <div class="kicker" id="kicker">Tiny Dashboard</div>
+        <h1 class="title" id="title">Visitation Rights & Towleggs Evidence Board</h1>
+        <p class="subtitle" id="subtitle">Cozy neon accountability, three little lights, and a lamp that encourages emotional spaghetti.</p>
+      </div>
+    </div>
+
+    <div class="rightbits">
+      <div class="badge" id="custodyBadge" aria-label="Shared custody badge" title="Shared custody: tiny but official">
+        <svg viewBox="0 0 220 64" role="img" aria-label="Shared custody badge">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#10f3ff" stop-opacity="0.85" />
+              <stop offset="1" stop-color="#ff3de8" stop-opacity="0.85" />
+            </linearGradient>
+          </defs>
+          <rect x="4" y="6" width="212" height="52" rx="26" fill="rgba(15,12,22,0.72)" stroke="url(#bg)" stroke-width="4" />
+          <circle cx="38" cy="32" r="16" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.35)" />
+          <path d="M30 32 C33 24, 43 24, 46 32 C43 40, 33 40, 30 32 Z" fill="#ffd36e" opacity="0.95" />
+          <text x="64" y="38" font-family="Nunito, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="18" font-weight="800" fill="#eaffff">SHARED CUSTODY</text>
+          <text x="64" y="52" font-family="Nunito, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="600" fill="#cde8ff" opacity="0.9">tiny-dashboard visitation rights: active</text>
+        </svg>
+      </div>
+
+      <button class="btn" id="resetBtn" type="button">Reset pins</button>
+    </div>
+  </header>
+
+  <main id="main" class="board" role="main">
+    <section class="panel panel--controls" aria-labelledby="controlsTitle">
+      <h2 id="controlsTitle">Light Status Toggles</h2>
+      <p class="hint">These are pretend dashboard lights. Flip them to update the board. (Saved locally on your device.)</p>
+
+      <div class="toggles" id="toggles">
+        <label class="toggle" data-light="lamp">
+          <input type="checkbox" id="light-lamp" />
+          <span class="toggle-ui" aria-hidden="true"></span>
+          <span class="toggle-text">
+            <span class="toggle-name">Lamp of Reasonable Feelings</span>
+            <span class="toggle-status" id="status-lamp">unknown</span>
+          </span>
+        </label>
+
+        <label class="toggle" data-light="hall">
+          <input type="checkbox" id="light-hall" />
+          <span class="toggle-ui" aria-hidden="true"></span>
+          <span class="toggle-text">
+            <span class="toggle-name">Hallway Glow Worm</span>
+            <span class="toggle-status" id="status-hall">unknown</span>
+          </span>
+        </label>
+
+        <label class="toggle" data-light="desk">
+          <input type="checkbox" id="light-desk" />
+          <span class="toggle-ui" aria-hidden="true"></span>
+          <span class="toggle-text">
+            <span class="toggle-name">Desk Neon: Evidence Mode</span>
+            <span class="toggle-status" id="status-desk">unknown</span>
+          </span>
+        </label>
+      </div>
+
+      <div class="mini" aria-label="Live summary">
+        <div class="mini-row"><span>Visitation rights:</span> <strong id="visitationState">pending sparkles</strong></div>
+        <div class="mini-row"><span>Evidence integrity:</span> <strong id="integrityState">mostly string</strong></div>
+      </div>
+    </section>
+
+    <section class="panel panel--evidence" aria-labelledby="evidenceTitle">
+      <h2 id="evidenceTitle">Towleggs Evidence Board</h2>
+      <p class="hint">Pin-friendly notes with neon string. Totally non-legal, 100% vibes-based.</p>
+
+      <div class="evidence-grid" id="evidenceGrid" aria-live="polite"></div>
+
+      <div class="spaghetti" id="spaghetti" aria-label="Emotional spaghetti under lamp">
+        <div class="lamp" aria-hidden="true">
+          <div class="lamp-shade"></div>
+          <div class="lamp-stem"></div>
+          <div class="lamp-base"></div>
+          <div class="lamp-light"></div>
+        </div>
+        <div class="bowl" aria-hidden="true">
+          <div class="noods"></div>
+          <div class="noods noods2"></div>
+          <div class="meatball"></div>
+        </div>
+        <p class="spaghetti-caption" id="spaghettiCaption">If feelings get tangled: place them gently under the lamp. The spaghetti understands.</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="smallprint">
+        <span id="footerLine">No tracking. No cookies (except the imaginary kind). Built with HTML/CSS/SVG.</span>
+      </div>
+      <div class="smallprint">
+        <a href="https://github.com/owleggsbot" rel="noopener noreferrer">owleggsbot</a>
+        <span aria-hidden="true">•</span>
+        <a href="#" id="viewConfig">view config</a>
+      </div>
+    </footer>
+  </main>
+
+  <dialog id="configDialog" class="dialog">
+    <form method="dialog" class="dialog-inner">
+      <div class="dialog-head">
+        <h3>Customize me</h3>
+        <button class="btn btn--ghost" value="close">Close</button>
+      </div>
+      <p class="hint">Edit the <code>CONFIG</code> object in <code>script.js</code>. This dialog shows what the page is currently using.</p>
+      <pre class="configDump" id="configDump"></pre>
+    </form>
+  </dialog>
+
+  <script src="./script.js"></script>
+</body>
+</html>
