@@ -56,6 +56,9 @@ function normalizeReadinessInput(input: ReadinessInput | ReadinessInputLegacy): 
   };
 }
 
+// Overloads for backwards-compatible call sites.
+export function deriveReadiness(input: ReadinessInput): ReadinessDerived;
+export function deriveReadiness(input: ReadinessInputLegacy): ReadinessDerived;
 export function deriveReadiness(input: ReadinessInput | ReadinessInputLegacy): ReadinessDerived {
   const normalized = normalizeReadinessInput(input);
 
