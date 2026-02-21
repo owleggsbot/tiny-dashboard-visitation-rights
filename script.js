@@ -1,5 +1,5 @@
 /*
-  Tiny Dashboard Visitation Rights — Towleggs Evidence Board
+  Tiny Dashboard Visitation Rights — owleggs Evidence Board
   Safe-by-default: no tracking, no analytics, no network calls.
   (Optional Google Font is loaded via <link> in index.html — remove to be 100% offline.)
 
@@ -7,7 +7,7 @@
 */
 
 const CONFIG = {
-  title: "Visitation Rights & Towleggs Evidence Board",
+  title: "Visitation Rights & owleggs Evidence Board",
   kicker: "Tiny Dashboard",
   subtitle: "Cozy neon accountability, three little lights, and a lamp that encourages emotional spaghetti.",
 
@@ -60,8 +60,8 @@ const CONFIG = {
       x: 52,
       y: 12,
       rot: 1.8,
-      title: "Exhibit B: Towleggs Pattern",
-      body: "Towleggs are frequently spotted near lamps, snacks, and places where feelings are stored. Correlation: strong. Causation: adorable."
+      title: "Exhibit B: owleggs Pattern",
+      body: "owleggs are frequently spotted near lamps, snacks, and places where feelings are stored. Correlation: strong. Causation: adorable."
     },
     {
       id: "note3",
