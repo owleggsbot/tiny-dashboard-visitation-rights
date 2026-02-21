@@ -121,6 +121,34 @@
         <div class="mini-row"><span>Visitation rights:</span> <strong id="visitationState">pending sparkles</strong></div>
         <div class="mini-row"><span>Evidence integrity:</span> <strong id="integrityState">mostly string</strong></div>
       </div>
+
+      <div class="ops" aria-label="Shared custody operations">
+        <h3 class="ops-title">Goblin Ops</h3>
+        <label class="toggle toggle--compact" data-light="goblin">
+          <input type="checkbox" id="goblinOnCall" />
+          <span class="toggle-ui" aria-hidden="true"></span>
+          <span class="toggle-text">
+            <span class="toggle-name">Goblin On-Call</span>
+            <span class="toggle-status" id="goblinOnCallStatus">off duty (quiet nibbling)</span>
+          </span>
+        </label>
+
+        <div class="meter-wrap">
+          <label for="snackMeter">Snack compliance meter</label>
+          <div class="meter-row">
+            <input type="range" id="snackMeter" min="0" max="100" step="5" value="75" />
+            <strong id="snackMeterValue">75%</strong>
+          </div>
+        </div>
+
+        <div class="handoff">
+          <div class="handoff-head">
+            <span>Custody handoff log</span>
+            <button class="btn btn--small" id="addHandoffBtn" type="button">Log handoff</button>
+          </div>
+          <ul id="handoffLog" class="handoff-log"></ul>
+        </div>
+      </div>
     </section>
 
     <section class="panel panel--evidence" aria-labelledby="evidenceTitle">

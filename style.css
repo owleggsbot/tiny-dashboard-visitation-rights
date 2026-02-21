@@ -212,6 +212,37 @@ h2{margin:0 0 8px; font-size:18px; letter-spacing:-0.01em;}
 .mini-row{display:flex; justify-content:space-between; gap:10px; font-size:13px; color:var(--muted);}
 .mini-row strong{color:var(--ink);}
 
+.ops{
+  margin-top:12px;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,0.12);
+  background:rgba(0,0,0,0.2);
+  display:grid;
+  gap:10px;
+}
+.ops-title{margin:0; font-size:14px; letter-spacing:0.01em; text-transform:uppercase; color:var(--muted);}
+.toggle--compact{padding:10px;}
+
+.meter-wrap{display:grid; gap:6px;}
+.meter-wrap label{font-size:13px; color:var(--muted);}
+.meter-row{display:flex; align-items:center; gap:10px;}
+#snackMeter{width:100%; accent-color: var(--neonA);}
+#snackMeter[data-band="medium"]{accent-color: var(--warn);}
+#snackMeter[data-band="high"]{accent-color: var(--good);}
+#snackMeterValue{min-width:40px; text-align:right;}
+
+.handoff{
+  border:1px dashed rgba(255,255,255,0.16);
+  border-radius:12px;
+  padding:10px;
+  background:rgba(255,255,255,0.03);
+}
+.handoff-head{display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:13px; color:var(--muted);}
+.btn--small{padding:7px 10px; font-size:12px;}
+.handoff-log{margin:8px 0 0; padding-left:18px; display:grid; gap:4px; max-height:120px; overflow:auto;}
+.handoff-log li{font-size:12px; color:rgba(234,243,255,0.86);}
+
 /* Evidence board */
 .panel--evidence{
   background:

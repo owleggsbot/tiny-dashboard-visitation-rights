@@ -91,6 +91,17 @@ const CONFIG = {
 
   spaghettiCaption: "If feelings get tangled: place them gently under the lamp. The spaghetti understands.",
 
+  goblinOnCall: {
+    on: "active (pager + crumbs engaged)",
+    off: "off duty (quiet nibbling)"
+  },
+
+  snackCompliance: {
+    low: "at risk: deploy emergency fruit snacks",
+    medium: "acceptable with supervision",
+    high: "excellent and crumb-compliant"
+  },
+
   // Local storage key for toggle persistence.
   storageKey: "tiny-dashboard-visitation-rights:v1"
 };
@@ -125,13 +136,34 @@ function saveState(state) {
   }
 }
 
+function normalizeState(raw) {
+  const base = defaultState();
+  if (!raw) return base;
+
+  return {
+    lights: {
+      lamp: !!(raw.lights && raw.lights.lamp),
+      hall: !!(raw.lights && raw.lights.hall),
+      desk: !!(raw.lights && raw.lights.desk)
+    },
+    goblinOnCall: !!raw.goblinOnCall,
+    snackCompliance: clamp(Number(raw.snackCompliance ?? base.snackCompliance), 0, 100),
+    handoffLog: Array.isArray(raw.handoffLog) && raw.handoffLog.length ? raw.handoffLog.slice(0, 12) : base.handoffLog
+  };
+}
+
 function defaultState() {
   return {
     lights: {
       lamp: true,
       hall: false,
       desk: true
-    }
+    },
+    goblinOnCall: false,
+    snackCompliance: 75,
+    handoffLog: [
+      "Shared custody ratified — snacks + logs present"
+    ]
   };
 }
 
@@ -232,9 +264,35 @@ function updateSummary(state) {
   integrity.textContent = state.lights.lamp ? CONFIG.integrityState.lampOn : CONFIG.integrityState.lampOff;
 }
 
+function updateGoblinOps(state) {
+  const goblinStatus = $("#goblinOnCallStatus");
+  goblinStatus.textContent = state.goblinOnCall ? CONFIG.goblinOnCall.on : CONFIG.goblinOnCall.off;
+
+  const meterValue = $("#snackMeterValue");
+  meterValue.textContent = `${state.snackCompliance}%`;
+
+  const meter = $("#snackMeter");
+  meter.dataset.band = state.snackCompliance < 40 ? "low" : state.snackCompliance < 75 ? "medium" : "high";
+  meter.title = state.snackCompliance < 40
+    ? CONFIG.snackCompliance.low
+    : state.snackCompliance < 75
+      ? CONFIG.snackCompliance.medium
+      : CONFIG.snackCompliance.high;
+}
+
+function renderHandoffLog(state) {
+  const list = $("#handoffLog");
+  list.innerHTML = "";
+  for (const row of state.handoffLog) {
+    const li = document.createElement("li");
+    li.textContent = row;
+    list.appendChild(li);
+  }
+}
+
 function wireUI() {
   // Initialize toggles based on CONFIG labels (text content already in HTML; keep it simple)
-  const state = loadState() || defaultState();
+  const state = normalizeState(loadState());
 
   for (const l of CONFIG.lights) {
     const checkbox = $("#light-" + l.id);
@@ -253,6 +311,35 @@ function wireUI() {
 
   updateSummary(state);
 
+  const goblinOnCall = $("#goblinOnCall");
+  goblinOnCall.checked = !!state.goblinOnCall;
+  goblinOnCall.addEventListener("change", () => {
+    state.goblinOnCall = goblinOnCall.checked;
+    updateGoblinOps(state);
+    saveState(state);
+  });
+
+  const snackMeter = $("#snackMeter");
+  snackMeter.value = String(state.snackCompliance);
+  snackMeter.addEventListener("input", () => {
+    state.snackCompliance = clamp(Number(snackMeter.value), 0, 100);
+    updateGoblinOps(state);
+    saveState(state);
+  });
+
+  $("#addHandoffBtn").addEventListener("click", () => {
+    const now = new Date();
+    const when = now.toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+    const row = `${when} — handoff complete (snacks + logs + minimal emotional damage)`;
+    state.handoffLog.unshift(row);
+    state.handoffLog = state.handoffLog.slice(0, 12);
+    renderHandoffLog(state);
+    saveState(state);
+  });
+
+  updateGoblinOps(state);
+  renderHandoffLog(state);
+
   $("#resetBtn").addEventListener("click", () => {
     const s = defaultState();
     for (const l of CONFIG.lights) {
@@ -260,7 +347,11 @@ function wireUI() {
       if (checkbox) checkbox.checked = !!s.lights[l.id];
       setLight(l.id, !!s.lights[l.id]);
     }
+    goblinOnCall.checked = !!s.goblinOnCall;
+    snackMeter.value = String(s.snackCompliance);
     updateSummary(s);
+    updateGoblinOps(s);
+    renderHandoffLog(s);
     saveState(s);
   });
 
