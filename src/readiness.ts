@@ -22,24 +22,55 @@ export type ReadinessInput = {
   thresholds?: ReadinessThresholds;
 };
 
+/**
+ * Back-compat for pre-domain/thresholds call sites.
+ *
+ * Deprecated: prefer `ReadinessInput` with `{ domain, thresholds }`.
+ */
+export type ReadinessInputLegacy = ReadinessDomain & {
+  now?: string;
+
+  /** Legacy name for tuning knobs. */
+  config?: ReadinessThresholds;
+
+  /** Allow "thresholds" in legacy form too (a lot of call sites only moved one side). */
+  thresholds?: ReadinessThresholds;
+};
+
 export type ReadinessDerived = {
   ageSeconds: number | null;
   status: ReadinessStatus;
 };
 
-export function deriveReadiness(input: ReadinessInput): ReadinessDerived {
-  const freshUnder = input.thresholds?.freshUnderSeconds ?? 86400;
-  const staleUnder = input.thresholds?.staleUnderSeconds ?? 259200;
-  const failureGrace = input.thresholds?.failureGraceSeconds ?? 0;
+function normalizeReadinessInput(input: ReadinessInput | ReadinessInputLegacy): ReadinessInput {
+  if ("domain" in input) return input;
 
-  const nowMs = input.now ? Date.parse(input.now) : Date.now();
+  return {
+    now: input.now,
+    thresholds: input.thresholds ?? input.config,
+    domain: {
+      lastSuccessAt: input.lastSuccessAt,
+      lastAttemptAt: input.lastAttemptAt,
+      lastAttemptOk: input.lastAttemptOk,
+    },
+  };
+}
+
+export function deriveReadiness(input: ReadinessInput | ReadinessInputLegacy): ReadinessDerived {
+  const normalized = normalizeReadinessInput(input);
+
+  const freshUnder = normalized.thresholds?.freshUnderSeconds ?? 86400;
+  const staleUnder = normalized.thresholds?.staleUnderSeconds ?? 259200;
+  const failureGrace = normalized.thresholds?.failureGraceSeconds ?? 0;
+
+  const nowMs = normalized.now ? Date.parse(normalized.now) : Date.now();
   if (Number.isNaN(nowMs)) throw new Error("Invalid now timestamp");
 
   if (staleUnder < freshUnder) {
     throw new Error("staleUnderSeconds must be >= freshUnderSeconds");
   }
 
-  const { lastAttemptAt, lastAttemptOk, lastSuccessAt } = input.domain;
+  const { lastAttemptAt, lastAttemptOk, lastSuccessAt } = normalized.domain;
 
   // Validation: lastAttemptOk requires lastAttemptAt
   if (typeof lastAttemptOk === "boolean" && !lastAttemptAt) {

@@ -77,6 +77,24 @@ const cases: Case[] = [
     },
     throws: /staleUnderSeconds must be >= freshUnderSeconds/,
   },
+  {
+    name: "legacy shape: top-level timestamps + config thresholds still work",
+    input: {
+      now: NOW,
+      lastSuccessAt: "2026-02-21T15:59:00Z",
+      config: { freshUnderSeconds: 120, staleUnderSeconds: 300 },
+    },
+    expect: { status: "fresh", ageSeconds: 60 },
+  },
+  {
+    name: "legacy shape: lastAttemptOk without lastAttemptAt still throws",
+    input: {
+      now: NOW,
+      lastSuccessAt: NOW,
+      lastAttemptOk: false,
+    },
+    throws: /lastAttemptAt is required/,
+  },
 ];
 
 describe("deriveReadiness", () => {
